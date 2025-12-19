@@ -2,6 +2,8 @@
 
 > **Low-Bandwidth, Neighbor-to-Neighbor Disaster Relief Platform**
 
+🔗 **Live Demo:** [https://sprintfour-a-low-bandwidth-neighbor.vercel.app/](https://sprintfour-a-low-bandwidth-neighbor.vercel.app/)
+
 A real-time web application designed to connect disaster victims with nearby helpers during emergencies. Built for **low-bandwidth scenarios** with voice input, GPS detection, and instant matching.
 
 ## 🌟 Features
