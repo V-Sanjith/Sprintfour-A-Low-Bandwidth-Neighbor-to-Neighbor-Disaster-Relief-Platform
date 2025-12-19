@@ -1,5 +1,6 @@
 import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { supabase } from './lib/supabase';
+import { getDeviceId } from './utils/device';
 import Header from './components/Header';
 import EmergencyPanel from './components/EmergencyPanel';
 import ImpactCounter from './components/ImpactCounter';
@@ -28,7 +29,6 @@ const recordPost = () => {
   const stored = localStorage.getItem(RATE_LIMIT_KEY);
   const postTimes = stored ? JSON.parse(stored) : [];
   postTimes.push(Date.now());
-  // Keep only last hour's posts
   const oneHourAgo = Date.now() - (60 * 60 * 1000);
   const recentPosts = postTimes.filter(t => t > oneHourAgo);
   localStorage.setItem(RATE_LIMIT_KEY, JSON.stringify(recentPosts));
@@ -90,9 +90,8 @@ export default function App() {
   };
 
   const handlePost = async (newPost) => {
-    // Rate limit check
     if (!checkRateLimit()) {
-      alert('⚠️ Slow down! You can only post 5 times per hour.\n\nThis prevents spam and keeps the platform useful for everyone.');
+      alert('⚠️ Slow down! You can only post 5 times per hour.');
       return;
     }
 
@@ -105,13 +104,14 @@ export default function App() {
       description: newPost.description || null,
       location: newPost.location,
       contact: newPost.contact,
+      device_id: getDeviceId(), // Track which device created this post
       status: 'OPEN'
     }]);
 
     if (error) {
       alert('Failed to post.');
     } else {
-      recordPost(); // Track this post for rate limiting
+      recordPost();
       setShowForm(false);
       setPrefill(null);
     }
